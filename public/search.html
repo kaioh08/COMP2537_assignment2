@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" src="./src/search.js"></script>
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./css/search.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <div id="header"></div>
+    <div id="nav-bar"></div>
+    <div class="search">
+        <div class="filters">
+            <div class="type-selection">
+                <label for="pokemon-type">Choose Type</label>
+                <select name="pokemon-type" id="pokemon-type">
+                    <option value="all">All</option>
+                    <option value="normal">Normal</option>
+                    <option value="fire">Fire</option>
+                    <option value="water">Water</option>
+                    <option value="grass">Grass</option>
+                    <option value="electric">Electric</option>
+                    <option value="ice">Ice</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="ground">Ground</option>
+                    <option value="flying">Flying</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="bug">Bug</option>
+                    <option value="ghost">Ghost</option>
+                    <option value="dark">Dark</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="steel">Steel</option>
+                    <option value="fairy">Fairy</option>
+               </select> 
+            </div>
+            <div class="region-selection">
+                <label for="type">Choose Region</label>
+                <select name="region" id="region">
+                    <option value="kanto">Kanto (1 - 151)</option>
+                    <option value="johto">Johto (152 - 251)</option>
+                    <option value="hoenn">Hoenn (252 - 386)</option>
+                    <option value="sinnoh">Sinnoh (387 - 494)</option>
+                    <option value="unova">Unova (495 - 649)</option>
+                    <option value="kalos">Kalos (650 - 721)</option>
+                    <option value="alola">Alola (722 - 809)</option>
+                    <option value="galar">Galar (810 - 898)</option>
+                </select>
+            </div>
+            <div class="identity-selection">
+                <label for="search-sort">Sort By</label>
+                <select name="search-sort" id="search-sort">
+                    <option value="id">ID</option>
+                    <option value="name">Name</option>
+                </select>
+            </div>
+            <div class="search-bar">
+                <label>Search Pokemon</label>
+                <input type="text" id="pokemonName" placeholder="Enter Name or ID">
+                <input type="submit" value="search" id="findPokemon">
+            </div>
+        </div>
+        <div class="search-history"></div>
+    </div>
+    <div class="main">
+        <div id="poke-container"></div>
+        <template id="poke-template">
+            <div class="poke-info">
+                <img class="poke-img">
+                <div class="poke-name"></div>
+            </div>
+        </template>
+        <div class="pagination" id="pagination">
+            <button id="first">First</button>
+            <button id="prev">Prev</button>
+            
+            <button id="next">Next</button>
+            <button id="last">Last</button>
+        </div>
+    </div>
+</body>
+</html>

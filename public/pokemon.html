@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" src="./src/pokemon.js"></script>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="./css/pokemon.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <div id="header"></div>
+    <div id="nav-bar"></div>
+    <div class="main">
+        <div class="poke-left-container">
+            <img class="poke-img">
+            <span class="poke-name"></span>
+            <span class="poke-id"></span>
+            <div>Height:<span class="poke-height"></span></div>
+            <div>Weight:<span class="poke-weight"></span></div>
+            <div id="type-container"></div>
+            <template id="type-template">
+                <span class="type"></span>
+            </template>
+        </div>
+        <div class="poke-right-container">
+            <h3>Description</h3>
+            <div class="description"></div>
+            <h3>Abilities</h3>
+            <div id="ability-container"></div>
+            <template id="ability-template">
+                <span class="ability"></span>
+            </template>
+            <h3>Base Stats</h3>
+            <div class="base-stats">
+                <div>HP:<span class="hp"></span></div>
+                <div>Attack:<span class="attack"></span></div>
+                <div>Defense:<span class="defense"></span></div>
+                <div>Special Attack:<span class="special-attack"></span></div>
+                <div>Special Defense:<span class="special-defense"></span></div>
+                <div>Speed:<span class="speed"></span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
