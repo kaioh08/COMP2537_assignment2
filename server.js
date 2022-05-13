@@ -1,14 +1,15 @@
-const timelineLink = `http://localhost:5002`
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5003;
 const bodyParser = require('body-parser');
-
-require('dotenv').config();
+const mongoose = require('mongoose');
+const https = require('https');
+var now = new Date(Date.now());
 const express = require('express');
-const bodyparser = require('body-parser');
 const app = express();
 
+var formatted = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+
+require('dotenv').config();
 app.set('view engine', 'ejs');
-const mongoose = require('mongoose');
 
 app.listen(process.env.PORT || 5002, err => {
     if (err) console.log(err)
@@ -19,76 +20,118 @@ app.get('/', (req, res) => {
     res.redirect('/home.html')
 })
 
-app.use(express.static("public"));
+app.use(express.static('./public'));
+
 app.use(bodyParser.urlencoded({
     parameterLimit: 100000,
     limit: '50mb',
     extended: true
-}))
+}));
 
-// [READ] all timelineDB events and render timeline.ejs
-app.get("/timeline", (req, res) => {
-    eventModel.find({}, (err, events) => {
-        if (err) {
-            console.log(err);
-        }
-        res.render("timeline", {
-            "events": events
-        })
-    })
-})
-app.get("/events/readAllEvents", (req, res) => {
-    eventModel.find({}, (err, events) => {
-        if (err) {
-            console.log(err)
-        }
-        res.json(events)
-    })
-})
 
-// [CREATE] a new event and insert it to the timelineDB
-app.put("/events/insertEvent", (req, res) => {
-    console.log(req.body);
-    eventModel.create({
-        text: req.body.text,
-        date: req.body.date,
-        time: req.body.time,
-        hits: req.body.hits
-    }, (err, data) => {
-        if (err) {
-            console.log(err);
-        }
-        res.send("Created successfully")
-    })
-})
+mongoose.connect("mongodb+srv://kaioh:FftZ53g5udQxjh7D@cluster0.vwaeg.mongodb.net/timelineDB?retryWrites=true&w=majority",
+    { useNewUrlParser: true, useUnifiedTopology: true });
 
-// [UPDATE] the `hits` field of an event in the timelineDB
-app.get("/events/incrementHits/:id", (req, res) => {
-    eventModel.updateOne(
-        {_id: req.params.id},
-        {$inc: {hits: 1}}, (err, data) => {
-            if (err) {
-                console.log(err);
-            }
-            res.send("Incremented successfully")
-        })
-})
-
-// [DELETE] an event from timelineDB
-app.get("/events/deleteEvent/:id", (req, res) => {
-    eventModel.deleteOne({_id: req.params.id}, (err, data) => {
-        if (err) {
-            console.log(err);
-        }
-        res.send("Deleted successfully")
-    })
-})
-
-// entry point
-app.listen(port, (err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log(`Server active on port ${port}!`);
-    }
+const timelineSchema = new mongoose.Schema({
+    text: String,
+    hits: Number,
+    time: String
 });
+const timelineModel = mongoose.model("timelineevents", timelineSchema);
+
+app.get('/timeline/getAllEvents', function (req, res) {
+    timelineModel.find({}, function (err, data) {
+        if (err) {
+            console.log("Error " + err);
+        } else {
+            console.log("Data " + data);
+            console.log("Time" + Date.now());
+        }
+        res.send(data);
+    });
+})
+
+app.put('/timeline/insert', function (req, res) {
+    console.log(req.body)
+    timelineModel.create({
+        'text': req.body.text,
+        'time': req.body.time,
+        'hits': req.body.hits
+    }, function (err, data) {
+        if (err) {
+            console.log("Error " + err);
+        } else {
+            console.log("Data " + data);
+        }
+        res.send("Insertion successful");
+    });
+})
+
+app.get('/timeline/delete/:id', function (req, res) {
+    // console.log(req.body)
+    timelineModel.remove({
+        '_id': req.params.id
+    }, function (err, data) {
+        if (err) {
+            console.log("Error " + err);
+        } else {
+            console.log("Data " + data);
+        }
+        res.send("Deletion successful");
+    });
+})
+
+
+app.get('/timeline/inscreaseHits/:id', function (req, res) {
+    // console.log(req.body)
+    timelineModel.updateOne({
+        '_id': req.params.id
+    },{
+        $inc: {'hits': 1}
+    } ,function (err, data) {
+        if (err) {
+            console.log("Error " + err);
+        } else {
+            console.log("Data " + data);
+        }
+        res.send("Update successful");
+    });
+})
+
+app.get('/timeline', function (req, res) {
+    timelineModel.find({}, function (err, timelineLogs) {
+        if (err) {
+            console.log("Error " + err);
+        } else {
+            console.log("Data " + JSON.stringify(timelineLogs));
+        }
+        res.send(JSON.stringify(timelineLogs));
+    });
+})
+
+
+app.put('/timeline/delete/:id', function (req, res) {
+    timelineModel.deleteOne({
+        id: req.params.id
+    }, function (err, data) {
+        if (err) console.log(err);
+        else
+            console.log(data);
+        res.send("Deleted")
+    });
+})
+
+
+
+app.get('/timeline/update/:id', function (req, res) {
+    timelineModel.updateOne({
+        id: req.params.id
+    }, {
+        $inc: { hits: 1 }
+    }, function (err, data) {
+        if (err) console.log(err);
+        else
+            console.log(data);
+        res.send("Updated")
+    });
+})
